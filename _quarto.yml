@@ -1,6 +1,6 @@
 project:
   title: "Examples"
-  type: dashboard
+  type: website
   output-dir: docs
 
 editor: visual
