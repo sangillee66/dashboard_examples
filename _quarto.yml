@@ -1,5 +1,7 @@
 project:
-  title: "02_Examples"
+  title: "Examples"
+  type: dashboard
+  output-dir: docs
 
 editor: visual
 
