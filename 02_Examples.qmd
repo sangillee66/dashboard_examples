@@ -1,5 +1,5 @@
 ---
-title: "02_Examples"
+title: "Examples"
 ---
 
 ## Quarto
