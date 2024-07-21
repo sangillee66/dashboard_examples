@@ -1,17 +1,101 @@
 ---
-title: "Examples"
+title: "대시보드형 디지털 교수-학습자료"
+author: 이상일(서울대학교 지리교육과 교수)
+format: 
+  dashboard:
+    logo: snu_logo_2.png
+    nav-buttons: 
+      - icon: github
+        href: https://github.com/sangillee66
+        aria-label: GitHub
+      - icon: envelope
+        href: mailto:si_lee@snu.ac.kr
+        aria-label: Mail
+    scrolling: true
+theme: default
+editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
-## Quarto
+# 임베딩
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+## Row
 
-```{r}
-1 + 1
-```
+:::{.card title="통계놀이터"}
 
-이상일
+### {width=50%}
 
-이상일
+<iframe src="https://kosis.kr/edu/share.do?shareID=S0500_16" loading="lazy" style="width: 100%; height: 600px; border: 0px none;" allow="web-share; clipboard-write">
 
-이상일
+</iframe>
+
+:::
+
+:::{.card title="통계지리정보서비스"}
+
+### {width=50%}
+
+<iframe src="https://sgis.kostat.go.kr/view/thematicMap/thematicMapMain?id=nLrqzDsxG720240721215144480nnqtvv3LsD" loading="lazy" style="width: 100%; height: 600px; border: 0px none;" allow="web-share; clipboard-write">
+
+</iframe>
+
+:::
+
+
+## Row Title {.row}
+
+:::{.card title="Our World in Data"}
+
+### {width="50%"}
+
+<iframe src="https://ourworldindata.org/grapher/child-mortality?time=earliest..latest&amp;tab=chart" loading="lazy" style="width: 100%; height: 600px; border: 0px none;" allow="web-share; clipboard-write">
+
+</iframe>
+:::
+
+:::{.card title="동영상"} 
+
+### {width="50%"}
+
+{{< video https://www.youtube.com/watch?v=Ao0s-bnmvSY >}}
+
+:::
+
+## Row
+
+::: {.card title="인구감소지역 지정"}
+### {width="50%"}
+
+<iframe src="https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do" loading="lazy" style="width: 100%; height: 600px; border: 0px none;" allow="web-share; clipboard-write">
+
+</iframe>
+:::
+
+### Column {width="50%"}
+
+::: {.card title="신문기사"}
+## 지방소멸 관련 기사 모음
+
+-   [연합뉴스: \[지방소멸 경고등\] '황금그물의 섬 추자도' 어디로…15년 새 인구 반토막](https://www.yna.co.kr/view/AKR20240719128000056?input=1195m)
+
+-   [주간조선: ‘소멸 위험’ 부산, 문제는 ‘20대 여성’의 이탈](https://weekly.chosun.com/news/articleView.html?idxno=36034)
+
+-   [경기일보: '인구감소지역 규제'는 특례로 빼고…지방소멸위기 극복](https://www.kyeonggi.com/article/20240718580267)
+:::
+
+# 시각화
+
+## Row {.tabset}
+
+### A Simple 2D Map
+
+![](seoul.jpg)
+
+### A 2.5D or 3D Map
+
+![](seoul_3d.png)
+
+### An Animated Map
+
+{{< video seoul_ani.mp4 >}}
