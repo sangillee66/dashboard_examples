@@ -179,7 +179,9 @@ datatable(wpp_2022_2024, filter = "top",
 -   NMR: 순이동률(net migration rate)(단위: 인구 1,000명당 순이동자)
 :::
 
-# 시각화
+# 그래프
+
+# 지도
 
 ## Row {.tabset}
 
@@ -194,3 +196,5 @@ datatable(wpp_2022_2024, filter = "top",
 ### An Animated Map
 
 {{< video seoul_ani.mp4 >}}
+
+# 챗GPT
