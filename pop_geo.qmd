@@ -5,6 +5,9 @@ format:
   dashboard:
     logo: snu_logo_2.png
     nav-buttons: 
+      - icon: house
+        href: https://sangillee.snu.ac.kr/
+        aria-label: Homepage
       - icon: github
         href: https://github.com/sangillee66
         aria-label: GitHub
@@ -83,6 +86,37 @@ editor_options:
 
 -   [경기일보: '인구감소지역 규제'는 특례로 빼고…지방소멸위기 극복](https://www.kyeonggi.com/article/20240718580267)
 :::
+
+# 테이블
+
+## Row
+
+
+```{r}
+#| title: 2024년 기준 국가별 통계(World Population Prospects 2022)
+library(tidyverse)
+library(DT)
+library(gapminder)
+wpp_2022 <- read_rds("wpp_2022.rds")
+wpp_2022_2024 <- wpp_2022 |> 
+  filter(
+    year == 2024,
+    type == "Country/Area"
+  ) |>  
+  select(
+    Name = region_name, 
+    year:NMR
+  )
+datatable(wpp_2022_2024, filter = "top",
+          extensions = "Buttons",
+          options = list(
+            pageLength = 5,
+            autoWidth = TRUE,
+            dom = "Bftip",
+            buttons = c("copy", "excel", "pdf", "print")
+          ))
+```
+
 
 # 시각화
 
