@@ -412,4 +412,4 @@ leaflet() |>
             options = popupOptions(closeButton = FALSE))
 ```
 
-# 반응형 AI
+# 생성형 AI
