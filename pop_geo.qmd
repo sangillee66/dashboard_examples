@@ -105,12 +105,16 @@ wpp_2022_2024 <- wpp_2022 |>
   )
   
 datatable(wpp_2022_2024, filter = "top",
-          extensions = "Buttons",
+          extensions = c("Buttons", "FixedColumns", "FixedHeader"),
           options = list(
-            pageLength = 5,
+            pageLength = 1000,
             autoWidth = TRUE,
             dom = "Bftip",
-            buttons = c("copy", "excel", "pdf", "print")
+            buttons = c("copy", "excel", "pdf", "print"),
+            dom = "t",
+            scrollX = TRUE,
+            fixedColumns = list(leftColumns = 2),
+            fixedHeader = TRUE
           ))
 ```
 
@@ -263,16 +267,19 @@ P + facet_wrap(~New_UN_Region_NM) +
 
 ::: {.card title="A Simple 2D Map"}
 #### 
+
 ![](seoul.jpg)
 :::
 
 ::: {.card title="A 2.5D or 3D Map"}
 #### 
+
 ![](seoul_3d.png)
 :::
 
 ::: {.card title="An Animated Map"}
 #### 
+
 {{< video seoul_ani.mp4 >}}
 :::
 
@@ -287,7 +294,7 @@ P + facet_wrap(~New_UN_Region_NM) +
 ### Column {width="50%"}
 
 ```{r}
-#| title: "세계 국가별 TFR 지도"
+#| title: "세계 국가별 TFR 지도(2024년)"
 library(spData)
 library(sf)
 library(tidyverse)
@@ -348,14 +355,12 @@ sigungu_shp <- st_read("sigungu.shp", options = "ENCODING=CP949")
 ```
 
 ```{r}
-#| title: "우리나라 인구소멸위험지수"
+#| title: 우리나라 시군구 단위 인구소멸위험지수(2022년)
 data_sigungu <- read_rds("data_sigungu.rds")
-
 sigungu_data <- sigungu_shp |> 
   left_join(
     data_sigungu, join_by(SGG1_CD == C1)
   )
-
 sigungu_data <- sigungu_data |> 
   mutate(
     index_class = case_when(
@@ -394,6 +399,17 @@ my_tmap <- tm_shape(sigungu_data) +
   ) +
   tm_shape(sido_shp) + tm_lines(lwd = 2)
 my_tmap
+```
+
+## Row
+
+```{r}
+#| title: "단순한 leaflet 지도"
+library(leaflet)
+leaflet() |> 
+  addTiles() |> 
+  addPopups(126.997839, 37.470810, "서울특별시교육청\n교육연수원",
+            options = popupOptions(closeButton = FALSE))
 ```
 
 # 반응형 AI
