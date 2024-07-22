@@ -5,6 +5,7 @@ library(tidyverse)
 library(sf)
 library(tmap)
 library(ggspatial)
+library(readxl)
 
 # 데이터
 
@@ -146,3 +147,45 @@ my_map
 ggsave(my_map, file = "pop_extinct_map_2.jpg", height = 10, dpi = 600)
 
 
+# WPP 데이터 수정 --------------------------------------------------------------
+
+wpp_2022 <- read_rds("wpp_2022.rds")
+
+wpp_2022_new <- wpp_2022 |> 
+  mutate(
+    across(
+      c(pop_jan_total, pop_jul_total, pop_jul_male, pop_jul_female, 
+        natural_change, pop_change, births, deaths_total, 
+        deaths_male, deaths_female, net_migrants), \(x) x * 1000
+    )
+  )
+
+wpp_2022_new_2024 <- wpp_2022_new |> 
+  filter(
+    year == 2024
+  )
+  
+
+write_rds(wpp_2022_new, "wpp_2022_new.rds")
+write_rds(wpp_2022_new_2024, "wpp_2022_new_2024")
+
+
+# 지역 코드 결합 ----------------------------------------------------------------
+
+world_region_code <- read_excel("World_Region_Code.xlsx", sheet = 1, col_names = TRUE)
+wpp_2022_new_region <- wpp_2022_new |> 
+  left_join(
+    world_region_code, join_by(location_code == `M49 Code`)
+  )
+
+write_rds(wpp_2022_new_region, "wpp_2022_new_region.rsd")
+
+
+# 국가만 ---------------------------------------------------------------------
+
+wpp_2022_new_region_only_country <- wpp_2022_new_region |> 
+  filter(
+    type == "Country/Area"
+  )
+
+write_rds(wpp_2022_new_region_only_country, "wpp_2022_new_region_only_country.rds")
