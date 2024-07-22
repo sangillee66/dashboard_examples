@@ -15,7 +15,6 @@ format:
         href: mailto:si_lee@snu.ac.kr
         aria-label: Mail
     scrolling: true
-theme: default
 editor: visual
 editor_options: 
   chunk_output_type: console
@@ -89,7 +88,6 @@ editor_options:
 #| title: 2024년 기준 국가별 주요 통계(World Population Prospects 2022)
 library(tidyverse)
 library(DT)
-library(gapminder)
 wpp_2022 <- read_rds("wpp_2022_new.rds")
 wpp_2022_2024 <- wpp_2022 |> 
   filter(
@@ -259,18 +257,143 @@ P + facet_wrap(~New_UN_Region_NM) +
 
 # 지도
 
-## Row {.tabset}
+## Row {height="50%"}
 
-### A Simple 2D Map
+### Column {.tabset width="70%"}
 
+::: {.card title="A Simple 2D Map"}
+#### 
 ![](seoul.jpg)
+:::
 
-### A 2.5D or 3D Map
-
+::: {.card title="A 2.5D or 3D Map"}
+#### 
 ![](seoul_3d.png)
+:::
 
-### An Animated Map
-
+::: {.card title="An Animated Map"}
+#### 
 {{< video seoul_ani.mp4 >}}
+:::
+
+### Column {width="30%"}
+
+::: {.card title="카토그램"}
+![](images/POP_long_ani.gif)
+:::
+
+## Row {height="50%"}
+
+### Column {width="50%"}
+
+```{r}
+#| title: "세계 국가별 TFR 지도"
+library(spData)
+library(sf)
+library(tidyverse)
+library(leaflet)
+data(world)
+world <- st_as_sf(world)
+
+wpp_2022 <- read_rds("wpp_2022.rds")
+my_wpp <- wpp_2022 |> 
+  filter(year == 2024)
+
+world_data <- world |>
+  left_join(my_wpp, join_by(iso_a2 == ISO2))
+
+bins <- c(0, 1.5, 2.1, 3, 4, 5, Inf)
+pal <- colorBin("YlOrRd", domain = world_data$TFR, bins = bins)
+labels <- sprintf("<strong>%s</strong><br/>%g",
+  world_data$name_long, world_data$TFR) |> lapply(htmltools::HTML)
+
+leaflet(world_data) |> 
+  addProviderTiles(providers$Esri.WorldTopoMap) |> 
+  addPolygons(
+    fillColor = ~pal(TFR),
+    weight =  2, 
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.6,
+    highlightOptions = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.6,
+      bringToFront = TRUE),
+    label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto")
+  ) |> 
+  addLegend(
+    pal = pal, values = ~TFR, opacity = 0.6, title = NULL,
+    position = "bottomright"
+  )
+
+
+```
+
+### Column {width="50%"}
+
+```{r}
+#| output: false
+library(tmap)
+
+sido_shp <- st_read("sido_line.shp", options = "ENCODING=CP949")
+sigungu_shp <- st_read("sigungu.shp", options = "ENCODING=CP949")
+
+```
+
+```{r}
+#| title: "우리나라 인구소멸위험지수"
+data_sigungu <- read_rds("data_sigungu.rds")
+
+sigungu_data <- sigungu_shp |> 
+  left_join(
+    data_sigungu, join_by(SGG1_CD == C1)
+  )
+
+sigungu_data <- sigungu_data |> 
+  mutate(
+    index_class = case_when(
+      index < 0.2 ~ "1",
+      index >= 0.2 & index < 0.5 ~ "2",
+      index >= 0.5 & index < 1.0 ~ "3",
+      index >= 1.0 & index < 1.5 ~ "4",
+      index >= 1.5 ~ "5"
+    ),
+    index_class = fct(index_class, levels = as.character(1:5))
+  )
+
+class_color <- c("1" = "#d7191c", "2" = "#fdae61",
+                 "3" = "#ffffbf", "4" = "#a6d96a", 
+                 "5" = "#1a9641")
+class_color <- c("1" = "#d7191c", "2" = "#fdae61",
+                 "3" = "#ffffbf", "4" = "#a6d96a", 
+                 "5" = "#1a9641")
+sigungu_data <- sigungu_data |> 
+  mutate(
+    index = as.numeric(index)
+  )
+tmap_mode(mode = "view")
+my_tmap <- tm_shape(sigungu_data) + 
+  tm_polygons(
+    col = "index",
+    palette = class_color, 
+    breaks = c(0, 0.2, 0.5, 1.0, 1.5, Inf), 
+    labels = c("< 0.2", "0.2~0.5", "0.5~1.0", "1.0~1.5", ">= 1.5"),
+    title = "Classes", 
+    popup.vars=c("지역소멸위험지수: " = "index"), 
+    popup.format = list(index = list(digits = 3)), 
+    id = "SGG1_FNM", 
+    alpha = 0.6, 
+    border.alpha = 0.5
+  ) +
+  tm_shape(sido_shp) + tm_lines(lwd = 2)
+my_tmap
+```
 
 # 반응형 AI
