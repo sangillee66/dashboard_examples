@@ -211,6 +211,7 @@ wpp_2022_2024 |>
 wpp_2022 <- read_rds("wpp_2022_new_region_only_country.rds")
 wpp_2022 |> 
   filter(
+    year <= 2024, 
     !is.na(New_UN_Region_NM)
   ) |> 
   mutate(
@@ -272,4 +273,4 @@ P + facet_wrap(~New_UN_Region_NM) +
 
 {{< video seoul_ani.mp4 >}}
 
-# 챗GPT
+# 반응형 AI
