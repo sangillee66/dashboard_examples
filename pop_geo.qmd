@@ -18,6 +18,7 @@ format:
 editor: visual
 editor_options: 
   chunk_output_type: console
+engine: shiny
 ---
 
 # 임베딩
@@ -294,6 +295,17 @@ P + facet_wrap(~New_UN_Region_NM) +
 ### Column {width="50%"}
 
 ```{r}
+#| title: "단순한 leaflet 지도"
+library(leaflet)
+leaflet() |> 
+  addTiles() |> 
+  addPopups(126.997839, 37.470810, "서울특별시교육청\n교육연수원",
+            options = popupOptions(closeButton = FALSE))
+```
+
+### Column {width="50%"}
+
+```{r}
 #| title: "세계 국가별 TFR 지도(2024년)"
 library(spData)
 library(sf)
@@ -342,6 +354,8 @@ leaflet(world_data) |>
 
 
 ```
+
+## Row
 
 ### Column {width="50%"}
 
@@ -401,15 +415,9 @@ my_tmap <- tm_shape(sigungu_data) +
 my_tmap
 ```
 
-## Row
+### Column {width="50%"}
 
-```{r}
-#| title: "단순한 leaflet 지도"
-library(leaflet)
-leaflet() |> 
-  addTiles() |> 
-  addPopups(126.997839, 37.470810, "서울특별시교육청\n교육연수원",
-            options = popupOptions(closeButton = FALSE))
-```
+
+
 
 # 생성형 AI
