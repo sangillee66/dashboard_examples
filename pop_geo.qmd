@@ -40,7 +40,7 @@ editor_options:
 </iframe>
 :::
 
-## Row Title {.row}
+## Row
 
 ::: {.card title="Our World in Data"}
 ###  {width="50%"}
@@ -261,7 +261,7 @@ P + facet_wrap(~New_UN_Region_NM) +
 
 # 지도
 
-## Row {height="50%"}
+## Row
 
 ### Column {.tabset width="70%"}
 
@@ -289,7 +289,7 @@ P + facet_wrap(~New_UN_Region_NM) +
 ![](images/POP_long_ani.gif)
 :::
 
-## Row {height="50%"}
+## Row
 
 ### Column {width="50%"}
 
@@ -356,67 +356,12 @@ leaflet(world_data) |>
 
 ## Row
 
-```{r}
-#| output: false
-library(tmap)
+::: {.row title="우리나라 인구소멸위험지수(2022년) 및 시군구별 추이(2015~2022년)"}
+왼편 지도에서 시군구 하나를 클릭하면 2015\~2022년의 추이를 볼 수 있습니다.
 
-sido_shp <- st_read("sido_line.shp", options = "ENCODING=CP949")
-sigungu_shp <- st_read("sigungu.shp", options = "ENCODING=CP949")
-data_sigungu <- read_rds("data_sigungu.rds")
+<iframe src="https://sangillee.shinyapps.io/ClickOnMap/" loading="lazy" style="width: 100%; height: 600px; border: 0px none;" allow="web-share; clipboard-write">
 
-```
-
-```{r}
-#| title: 우리나라 시군구 단위 인구소멸위험지수(2022년)
-sigungu_data <- sigungu_shp |> 
-  left_join(
-    data_sigungu, join_by(SGG1_CD == C1)
-  )
-sigungu_data <- sigungu_data |> 
-  mutate(
-    index_class = case_when(
-      index < 0.2 ~ "1",
-      index >= 0.2 & index < 0.5 ~ "2",
-      index >= 0.5 & index < 1.0 ~ "3",
-      index >= 1.0 & index < 1.5 ~ "4",
-      index >= 1.5 ~ "5"
-    ),
-    index_class = fct(index_class, levels = as.character(1:5))
-  )
-
-class_color <- c("1" = "#d7191c", "2" = "#fdae61",
-                 "3" = "#ffffbf", "4" = "#a6d96a", 
-                 "5" = "#1a9641")
-class_color <- c("1" = "#d7191c", "2" = "#fdae61",
-                 "3" = "#ffffbf", "4" = "#a6d96a", 
-                 "5" = "#1a9641")
-sigungu_data <- sigungu_data |> 
-  mutate(
-    index = as.numeric(index)
-  )
-tmap_mode(mode = "view")
-
-
-my_tmap <- tm_shape(sigungu_data) + 
-  tm_polygons(
-    col = "index",
-    palette = class_color, 
-    breaks = c(0, 0.2, 0.5, 1.0, 1.5, Inf), 
-    labels = c("< 0.2", "0.2~0.5", "0.5~1.0", "1.0~1.5", ">= 1.5"),
-    title = "Classes", 
-    popup.vars=c("지역소멸위험지수: " = "index"), 
-    popup.format = list(index = list(digits = 3)), 
-    id = "SGG1_FNM", 
-    alpha = 0.6, 
-    border.alpha = 0.5
-  ) +
-  tm_shape(sido_shp) + tm_lines(lwd = 2)
-my_tmap
-
-
-
-```
-
-## Row
+</iframe>
+:::
 
 # 생성형 AI

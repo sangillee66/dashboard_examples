@@ -189,3 +189,69 @@ wpp_2022_new_region_only_country <- wpp_2022_new_region |>
   )
 
 write_rds(wpp_2022_new_region_only_country, "wpp_2022_new_region_only_country.rds")
+
+
+
+# 시군구 인구소멸지수 지도(quarto) -----------------------------------------------------------
+
+## Row
+
+```{r}
+#| output: false
+library(tmap)
+
+sido_shp <- st_read("sido_line.shp", options = "ENCODING=CP949")
+sigungu_shp <- st_read("sigungu.shp", options = "ENCODING=CP949")
+data_sigungu <- read_rds("data_sigungu.rds")
+
+```
+
+```{r}
+#| title: 우리나라 시군구 단위 인구소멸위험지수(2022년)
+sigungu_data <- sigungu_shp |> 
+  left_join(
+    data_sigungu, join_by(SGG1_CD == C1)
+  )
+sigungu_data <- sigungu_data |> 
+  mutate(
+    index_class = case_when(
+      index < 0.2 ~ "1",
+      index >= 0.2 & index < 0.5 ~ "2",
+      index >= 0.5 & index < 1.0 ~ "3",
+      index >= 1.0 & index < 1.5 ~ "4",
+      index >= 1.5 ~ "5"
+    ),
+    index_class = fct(index_class, levels = as.character(1:5))
+  )
+
+class_color <- c("1" = "#d7191c", "2" = "#fdae61",
+                 "3" = "#ffffbf", "4" = "#a6d96a", 
+                 "5" = "#1a9641")
+class_color <- c("1" = "#d7191c", "2" = "#fdae61",
+                 "3" = "#ffffbf", "4" = "#a6d96a", 
+                 "5" = "#1a9641")
+sigungu_data <- sigungu_data |> 
+  mutate(
+    index = as.numeric(index)
+  )
+tmap_mode(mode = "view")
+
+
+my_tmap <- tm_shape(sigungu_data) + 
+  tm_polygons(
+    col = "index",
+    palette = class_color, 
+    breaks = c(0, 0.2, 0.5, 1.0, 1.5, Inf), 
+    labels = c("< 0.2", "0.2~0.5", "0.5~1.0", "1.0~1.5", ">= 1.5"),
+    title = "Classes", 
+    popup.vars=c("지역소멸위험지수: " = "index"), 
+    popup.format = list(index = list(digits = 3)), 
+    id = "SGG1_FNM", 
+    alpha = 0.6, 
+    border.alpha = 0.5
+  ) +
+  tm_shape(sido_shp) + tm_lines(lwd = 2)
+my_tmap
+
+```
+
