@@ -226,12 +226,13 @@ wpp_2022 |>
               marker = list(sizeref = 0.2, sizemode = "area"))
 ```
 
-## Row
+## Row 
 
-### Column
+### Column {.tabset}
+
+#### TFR과 IMR의 관련성(1950~2024년)
 
 ```{r}
-#| title: "TFR과 IMR의 관련성(1950~2024년)"
 library(gganimate)
 P <- wpp_2022 |> 
   filter(
@@ -250,14 +251,38 @@ P + transition_time(year) +
   labs(title = "연도: {frame_time}")
 ```
 
-### Column
+#### 세계지역별
 
 ```{r}
-#| title: "TFR과 IMR의 관련성(1950~2024년)"
 P + facet_wrap(~New_UN_Region_NM) +
   transition_time(year) +
   labs(title = "연도: {frame_time}")
 ```
+
+### Column
+
+```{r}
+#| title: "세계지역별 인구수 변화(1950~2100년)"
+library(echarts4r)
+P <- wpp_2022 |> 
+  filter(
+    year <= 2100, 
+    !is.na(New_UN_Region_NM)
+  ) |> 
+  mutate(
+    year = as.character(year)
+  ) |> 
+  summarize(
+    total_pop = sum(pop_jul_total),
+    .by = c(New_UN_Region_NM, year)
+  ) |> 
+  group_by(New_UN_Region_NM) |> 
+  e_charts(year) |> 
+  e_line(total_pop) |> 
+  e_tooltip(trigger = "axis")
+P
+```
+
 
 # 지도
 
