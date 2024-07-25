@@ -24,7 +24,7 @@ editor_options:
 
 ## Row
 
-::: {.card title="통계놀이터"}
+::: {.card title="KOSIS 통계놀이터"}
 ###  {width="50%"}
 
 <iframe src="https://kosis.kr/edu/share.do?shareID=S0500_16" loading="lazy" style="width: 100%; height: 600px; border: 0px none;" allow="web-share; clipboard-write">
