@@ -298,7 +298,7 @@ P + facet_wrap(~New_UN_Region_NM) +
 library(leaflet)
 leaflet() |> 
   addTiles() |> 
-  addPopups(126.997839, 37.470810, "서울특별시교육청\n교육연수원",
+  addPopups(126.955173, 37.460415, "서울대학교\n지리교육과",
             options = popupOptions(closeButton = FALSE))
 ```
 
