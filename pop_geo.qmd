@@ -18,7 +18,6 @@ format:
 editor: visual
 editor_options: 
   chunk_output_type: console
-engine: shiny
 ---
 
 # 임베딩
@@ -357,20 +356,18 @@ leaflet(world_data) |>
 
 ## Row
 
-### Column {width="50%"}
-
 ```{r}
 #| output: false
 library(tmap)
 
 sido_shp <- st_read("sido_line.shp", options = "ENCODING=CP949")
 sigungu_shp <- st_read("sigungu.shp", options = "ENCODING=CP949")
+data_sigungu <- read_rds("data_sigungu.rds")
 
 ```
 
 ```{r}
 #| title: 우리나라 시군구 단위 인구소멸위험지수(2022년)
-data_sigungu <- read_rds("data_sigungu.rds")
 sigungu_data <- sigungu_shp |> 
   left_join(
     data_sigungu, join_by(SGG1_CD == C1)
@@ -398,6 +395,8 @@ sigungu_data <- sigungu_data |>
     index = as.numeric(index)
   )
 tmap_mode(mode = "view")
+
+
 my_tmap <- tm_shape(sigungu_data) + 
   tm_polygons(
     col = "index",
@@ -413,11 +412,11 @@ my_tmap <- tm_shape(sigungu_data) +
   ) +
   tm_shape(sido_shp) + tm_lines(lwd = 2)
 my_tmap
+
+
+
 ```
 
-### Column {width="50%"}
-
-
-
+## Row
 
 # 생성형 AI
