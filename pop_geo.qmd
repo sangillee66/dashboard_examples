@@ -226,11 +226,11 @@ wpp_2022 |>
               marker = list(sizeref = 0.2, sizemode = "area"))
 ```
 
-## Row 
+## Row
 
 ### Column {.tabset}
 
-#### TFR과 IMR의 관련성(1950~2024년)
+#### TFR과 IMR의 관련성(1950\~2024년)
 
 ```{r}
 library(gganimate)
@@ -282,7 +282,6 @@ P <- wpp_2022 |>
   e_tooltip(trigger = "axis")
 P
 ```
-
 
 # 지도
 
@@ -390,3 +389,13 @@ leaflet(world_data) |>
 :::
 
 # 생성형 AI
+
+## Row
+
+::: {.row title="생성형 AI"}
+[Google AI Studio](https://aistudio.google.com/app/prompts/new_chat)에서 획득한 오픈 API를 통해 [Google Gemini](https://gemini.google.com/app)와 채팅하기([GenAI](https://genai.gd.edu.kg/) 패키지)
+
+<iframe src="https://sangillee.shinyapps.io/GoogleAI_Shiny/" loading="lazy" style="width: 100%; height: 600px; border: 0px none;" allow="web-share; clipboard-write">
+
+</iframe>
+:::
