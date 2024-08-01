@@ -349,6 +349,12 @@ pal <- colorBin("YlOrRd", domain = world_data$TFR, bins = bins)
 labels <- sprintf("<strong>%s</strong><br/>%g",
   world_data$name_long, world_data$TFR) |> lapply(htmltools::HTML)
 
+world_data <- 
+  world_data |> 
+  filter(
+    !is.na(TFR)
+  )
+
 leaflet(world_data) |> 
   addProviderTiles(providers$Esri.WorldTopoMap) |> 
   addPolygons(
