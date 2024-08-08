@@ -342,18 +342,15 @@ my_wpp <- wpp_2022 |>
   filter(year == 2024)
 
 world_data <- world |>
-  left_join(my_wpp, join_by(iso_a2 == ISO2))
+  left_join(my_wpp, join_by(iso_a2 == ISO2)) |> 
+  filter(
+    !is.na(TFR)
+  )
 
 bins <- c(0, 1.5, 2.1, 3, 4, 5, Inf)
 pal <- colorBin("YlOrRd", domain = world_data$TFR, bins = bins)
 labels <- sprintf("<strong>%s</strong><br/>%g",
   world_data$name_long, world_data$TFR) |> lapply(htmltools::HTML)
-
-world_data <- 
-  world_data |> 
-  filter(
-    !is.na(TFR)
-  )
 
 leaflet(world_data) |> 
   addProviderTiles(providers$Esri.WorldTopoMap) |> 
