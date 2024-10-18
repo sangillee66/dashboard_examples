@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: c51188e5-7d5d-46d4-ba56-efffeabafa38
+      url: 'https://sangillee.quarto.pub/02_examples'
